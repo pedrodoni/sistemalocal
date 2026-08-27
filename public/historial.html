@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="historial">
+
+<a href="index.html">⬅ Home</a>
+
+<h1>📊 Historial de ventas</h1>
+
+<label>
+  📅 Mes:
+  <input type="month" id="filtroMes">
+</label>
+
+<label style="margin-left:15px">
+  🗓 Día:
+  <input type="date" id="filtroDia">
+</label>
+
+<hr>
+
+<div class="caja-hoy">
+  <h3>💰 Caja del día seleccionado</h3>
+  <p>Total: $<span id="totalHoy">0</span></p>
+  <p>Efectivo: $<span id="efectivoHoy">0</span></p>
+  <p>No efectivo: $<span id="noEfectivoHoy">0</span></p>
+  <p>Cantidad de ventas: <span id="cantidadVentas">0</span></p>
+  <p>Promedio por venta: $<span id="promedioVentas">0</span></p>
+</div>
+
+<details id="gananciaDetalle" style="margin-top:15px; border:1px solid #ddd; border-radius:8px; padding:12px 16px;">
+  <summary style="cursor:pointer; font-weight:bold;">💰 Ganancia estimada del período</summary>
+
+  <p>Costo estimado: $<span id="costoEstimado">0</span></p>
+  <p>Ganancia estimada: $<span id="gananciaEstimada">0</span></p>
+  <p>Margen promedio: <span id="margenEstimado">0</span>%</p>
+
+  <p style="color:#888; font-size:13px;">
+    Estimado según el precio de compra que tengas cargado <b>hoy</b> en cada producto.
+    Si en algún momento lo compraste más barato (oferta/promo) y no actualizaste ese
+    precio, tu ganancia real fue mayor a la que ves acá.
+  </p>
+
+  <ul id="gananciaPorProducto"></ul>
+</details>
+
+<hr>
+
+<h2>🏷️ Ventas por categoría</h2>
+<ul id="ventasPorCategoria"></ul>
+
+<hr>
+<h2>🕐 Franja horaria con más ventas</h2>
+<ul id="ventasPorHora"></ul>
+
+<h2>💰 Recaudación por día</h2>
+<ul id="recaudacion"></ul>
+
+<hr>
+
+<h2>📈 Gráficos</h2>
+
+<div class="graficos">
+  <div class="grafico-box">
+    <h3>📅 Ventas semanales</h3>
+    <canvas id="graficoSemanal"></canvas>
+  </div>
+
+  <div class="grafico-box">
+    <h3>📆 Ventas mensuales</h3>
+    <canvas id="graficoMensual"></canvas>
+  </div>
+</div>
+
+<hr>
+
+<h2>🧾 Ventas</h2>
+<ul id="ventas"></ul>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="module" src="historial.js"></script>
+
+</body>
+</html>

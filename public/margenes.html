@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Márgenes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="margenes">
+
+<div class="header">
+  <a href="index.html">⬅ Home</a>
+  <h1>Márgenes de productos</h1>
+</div>
+
+<div class="contenedor">
+
+  <!-- 🔹 TOTALES -->
+  <div class="card">
+    <h2>Totales de mercadería</h2>
+
+    <div class="totales">
+      <div>
+        <span>Total compra</span>
+        <strong id="totalCompra">$0</strong>
+      </div>
+
+      <div>
+        <span>Total venta</span>
+        <strong id="totalVenta">$0</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 FILTROS -->
+  <div class="card">
+    <div class="filtros">
+      <input id="busqueda" placeholder="Buscar producto...">
+      <select id="filtroCategoria">
+        <option value="Todas">Todas</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 🔹 LISTA -->
+  <div class="carrd">
+    <ul id="lista"></ul>
+  </div>
+
+</div>
+
+<script type="module" src="margenes.js"></script>
+</body>
+</html>

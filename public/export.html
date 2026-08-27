@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Exportar datos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="gastos">
+
+<div class="header">
+  <a href="index.html">⬅ Home</a>
+  <h1>⬇️ Exportar datos</h1>
+</div>
+
+<div class="contenedor">
+
+  <div class="card">
+    <h2>Descargar base completa</h2>
+    <p style="color:#666;">
+      Baja un archivo JSON con todo lo que hay hoy en <b>productos</b>, <b>ventas</b>,
+      <b>compras</b> y <b>gastos</b>. Usa tu propia sesión, no hace falta ninguna clave.
+    </p>
+    <button id="btnExportar" class="btn">Descargar JSON</button>
+    <p id="estado" style="margin-top:12px; color:#888;"></p>
+  </div>
+
+</div>
+
+<script type="module" src="export.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<body class="productos">
+
+<div class="header">
+  <a href="index.html">⬅ Home</a>
+  <h1>📦 Productos</h1>
+</div>
+
+<div class="contenedor">
+
+  <div class="card">
+    <h2>Agregar / actualizar producto</h2>
+
+    <div class="form-grid">
+      <input id="codigoBarra" placeholder="Código de barras">
+
+      <div style="grid-column: span 2;">
+        <label>
+          <input type="checkbox" id="multiCodigo">
+          Permitir múltiples códigos
+        </label>
+
+        <div id="contenedorCodigos" style="display:none; margin-top:10px;">
+          <div id="listaCodigos"></div>
+          <button type="button" id="agregarCodigo">➕ Agregar código</button>
+        </div>
+      </div>
+
+      <input id="nombre" placeholder="Nombre">
+      <input id="categoria" placeholder="Categoría">
+      <input id="precioCompra" type="number" placeholder="Precio compra">
+      <input id="precioVenta" type="number" placeholder="Precio venta">
+      <input id="stock" type="number" placeholder="Stock">
+    </div>
+
+  </div>
+
+  <button id="guardar" class="btn">Guardar</button>
+
+  <div class="card">
+    <h2>Buscar productos</h2>
+
+    <div class="filtros">
+      <input id="busqueda" placeholder="Buscar por nombre o codigo">
+      <select id="filtroCategoria">
+        <option value="Todas">Todas</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="carrd">
+    <ul id="lista" class="lista-productos"></ul>
+  </div>
+
+</div>
+
+<script type="module" src="productos.js"></script>
+</body>
+</html>

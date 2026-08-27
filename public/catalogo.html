@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de precios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="catalogo">
+
+  <div class="header">
+    <a href="index.html">⬅ Home</a>
+    <h1>🧾 Lista de precios</h1>
+    <h3><button id="exportarPdf">📄 Exportar PDF</button></h3>
+  </div>
+
+  <div class="contenedor">
+   <div class="cad">
+    <h2>Productos disponibles</h2>
+
+    <table class="tabla-precios">
+    <thead>
+      <tr>
+        <th>Codigo</th>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        </tr>
+        </thead>
+        <tbody id="tabla"></tbody>
+      </table>
+    </div>
+</div>
+ 
+<button id="logout">Cerrar sesión</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="module" src="catalogo.js"></script>
+</body>
+</html>

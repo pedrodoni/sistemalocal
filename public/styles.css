@@ -1,0 +1,865 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    max-width: 140px;
+    margin-bottom: 10px;
+}
+
+.titulo {
+    margin-bottom: 40px;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(2, 260px);
+    gap: 30px;
+}
+
+.menu a {
+    text-decoration: none;
+}
+
+.card {
+    height: 140px;
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card:hover {
+    background: #e6e9ee;
+    border-color: #bbb;
+    transform: translateY(-4px);
+}
+/* =========================
+   PAGINA PRODUCTOS
+========================= */
+body.productos {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+/* Header */
+.productos .header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+}
+
+.productos .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Contenedor general */
+.productos .contenedor {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Cards */
+.productos .card {
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+}
+
+/* Formulario */
+.productos .form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.productos input,
+.productos select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+/* Botón guardar */
+.productos .btn {
+    padding: 12px 26px;
+    border-radius: 12px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Filtros */
+.productos .filtros {
+    display: flex;
+    gap: 15px;
+}
+
+/* Lista */
+.productos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.productos li {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+/* =========================
+   PAGINA VENTA
+========================= */
+body.venta {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+/* Reutilizamos header y contenedor */
+.venta .header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+}
+
+.venta .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+}
+
+.venta .contenedor {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Cards */
+.venta .card {
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+}
+
+/* Filtros */
+.venta .filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.venta input,
+.venta select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+/* Lista productos */
+.venta #productos li,
+.venta #carrito li {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Total */
+.venta h3 {
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+/* Botón confirmar */
+.venta .btn {
+    margin-top: 15px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 14px;
+    border: none;
+    background: #16a34a;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.venta .btn:hover {
+    background: #15803d;
+}
+/* =========================
+   LISTA PRODUCTOS SUELTA
+========================= */
+
+.productos .lista-productos {
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0;
+    list-style: none;
+}
+
+.productos .lista-productos li {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+body.venta {
+    
+    padding: 30px 0;
+}
+.car{
+    display: flex;
+    justify-content: center;
+}
+.ola{
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+}
+.botonazo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+/* =========================
+   PAGINA HISTORIAL
+========================= */
+
+body.historial {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+/* Contenedor general */
+.historial .contenedor {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Filtro mes */
+.historial input[type="month"] {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+/* Recaudación */
+.historial ul {
+    list-style: none;
+    padding: 0;
+}
+
+.historial li {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+/* =========================
+   GRAFICOS
+========================= */
+
+.graficos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.grafico-box {
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 20px;
+}
+
+.grafico-box h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Canvas tamaño controlado */
+.grafico-box canvas {
+    width: 100% !important;
+    height: 260px !important;
+}
+
+/* Responsive simple (por si acaso) */
+@media (max-width: 900px) {
+    .graficos {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================
+   PAGINA CATALOGO
+========================= */
+body.catalogo {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+/* Header */
+.catalogo .header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+}
+
+.catalogo .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Contenedor */
+.catalogo .contenedor {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Card */
+.catalogo .card {
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+}
+
+/* Tabla */
+
+
+.tabla-precios {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tabla-precios thead {
+    background: #e6e9ee;
+}
+
+.tabla-precios th,
+.tabla-precios td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.tabla-precios th {
+    font-weight: bold;
+    color: #333;
+}
+
+.tabla-precios tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Precio alineado */
+.tabla-precios td:nth-child(3) {
+    font-weight: bold;
+    color: #16a34a;
+}
+
+/* Stock */
+.tabla-precios td:nth-child(4) {
+    font-weight: bold;
+}
+
+/* =========================
+   PAGINA MARGENES
+========================= */
+body.margenes {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+/* Header */
+.margenes .header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+}
+
+.margenes .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Contenedor */
+.margenes .contenedor {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Card */
+.margenes .card {
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+}
+
+/* Lista */
+.margenes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Item margen */
+.margen-item {
+    background: white;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    align-items: center;
+}
+
+/* Info */
+.margen-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.margen-info strong {
+    font-size: 16px;
+    color: #111;
+}
+
+.margen-info span {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Precios */
+.margen-precios {
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Margen */
+.margen-valor {
+    font-size: 22px;
+    font-weight: bold;
+    color: #16a34a;
+    text-align: right;
+}
+.venta #carrito li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.venta #carrito button {
+    background: #ef4444;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.venta #carrito button:hover {
+    background: #dc2626;
+}
+/* =========================
+   PAGINA GASTOS
+========================= */
+body.gastos {
+    display: block;
+    height: auto;
+    padding: 30px 0;
+}
+
+.gastos .header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+}
+
+.gastos .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+}
+
+.gastos .contenedor {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.gastos .card {
+    height: auto;
+    display: block;
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+}
+
+/* Selector de mes */
+.mes-card {
+    position: relative;
+}
+
+.mes-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.mes-flecha {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 22px;
+    font-weight: bold;
+    color: #4f46e5;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.mes-flecha:hover {
+    background: #4f46e5;
+    color: white;
+    border-color: #4f46e5;
+}
+
+.mes-actual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 14px;
+    padding: 10px 28px;
+    cursor: pointer;
+    min-width: 180px;
+    transition: 0.2s;
+}
+
+.mes-actual:hover {
+    border-color: #4f46e5;
+}
+
+.mes-actual span:first-child {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+}
+
+.mes-actual span:last-child {
+    font-size: 14px;
+    color: #888;
+}
+
+.mes-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.mes-grid-nav-anio {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.mes-grid-nav-anio button {
+    border: none;
+    background: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #4f46e5;
+}
+
+.mes-grid-item {
+    padding: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f2f4f7;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.mes-grid-item:hover {
+    background: #e6e9ee;
+}
+
+.mes-grid-item.activo {
+    background: #4f46e5;
+    color: white;
+    border-color: #4f46e5;
+    font-weight: bold;
+}
+
+/* Resumen */
+.resumen-card {
+    background: white;
+}
+
+.resumen-total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 18px;
+}
+
+.resumen-total span {
+    font-size: 14px;
+    color: #888;
+}
+
+.resumen-total strong {
+    font-size: 40px;
+    color: #4f46e5;
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    text-align: center;
+}
+
+.resumen-item {
+    display: flex;
+    flex-direction: column;
+    background: #f2f4f7;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.resumen-item span {
+    font-size: 13px;
+    color: #888;
+}
+
+.resumen-item strong {
+    font-size: 20px;
+    color: #222;
+    margin-top: 4px;
+}
+
+.desglose-categorias {
+    margin-top: 20px;
+}
+
+.categoria-fila {
+    margin-bottom: 12px;
+}
+
+.categoria-fila-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.categoria-barra-fondo {
+    background: #eee;
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.categoria-barra {
+    background: #4f46e5;
+    height: 100%;
+    border-radius: 8px;
+}
+
+/* Form agregar gasto */
+.form-grid-gastos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.gastos input,
+.gastos select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+.gastos .btn {
+    padding: 12px 26px;
+    border-radius: 12px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Lista de gastos */
+.gastos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-gastos li {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+.gasto-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gasto-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gasto-fecha {
+    font-weight: bold;
+    color: #4f46e5;
+    min-width: 45px;
+}
+
+.gasto-categoria {
+    font-size: 12px;
+    color: #888;
+    background: #f2f4f7;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.gasto-derecha {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gasto-monto {
+    font-weight: bold;
+}
+
+.gasto-borrar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+    .form-grid-gastos {
+        grid-template-columns: 1fr 1fr;
+    }
+    .resumen-grid {
+        grid-template-columns: 1fr;
+    }
+    .mes-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

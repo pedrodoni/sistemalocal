@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nueva venta</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="venta">
+
+<div class="header">
+  <a href="index.html">⬅ Home</a>
+  <h1>🛒 Nueva venta</h1>
+</div>
+<div style="display: flex; justify-content: center; align-items: center;">
+    <h3>Calculadora de vuelto</h3>
+
+    <label>.....Monto: $</label>
+    <input type="number" id="calcMonto">
+
+    <label>.....Pago con: $</label>
+    <input type="number" id="calcPago">
+
+    <h3>.....Vuelto: $<span id="calcVuelto">0</span></h3>
+  </div>
+
+<h2 class="ola">Carrito</h2>
+
+<div class="ola">
+  <input id="cliente" placeholder="Nombre del comprador (opcional)">
+</div>
+
+<div class="car">
+  <ul id="carrito"></ul>
+</div>
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <label>Descuento: $</label>
+    <input type="number" id="descuento" value="0" min="0">
+  </div>
+<div class="ola pago">
+
+  <label style="font-size:22px;">Medio de pago:</label>
+
+  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
+    <input type="radio" name="medioPago" value="efectivo" checked>
+    Efectivo
+  </label>
+
+  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
+    <input type="radio" name="medioPago" value="posnet">
+    POSNET
+  </label>
+
+  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
+    <input type="radio" name="medioPago" value="trsf_dany">
+    Transferencia Dany
+  </label>
+
+  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
+    <input type="radio" name="medioPago" value="trsf_ana">
+    Transferencia Ana
+  </label>
+
+</div>
+
+<h3 style="display: flex; justify-content: center; align-items: center; gap: 5px; margin-bottom: 15px;">Total final: $<span id="totalFinal">0</span></h3> <br>
+
+<div class="botonazo">
+  <button id="confirmar" class="btn">Confirmar venta</button>
+</div>
+
+<div class="contenedor">
+
+  <div class="crd">
+    <h2>➕ Producto suelto</h2>
+
+    <input id="sueltoNombre" placeholder="Nombre">
+    <input id="sueltoPrecio" type="number" placeholder="Precio">
+    <input id="sueltoCantidad" type="number" min="1" value="1">
+
+    <button id="agregarSuelto">Agregar al carrito</button>
+  </div>
+
+  <div class="crd">
+    <h2>Productos disponibles</h2>
+
+    <div class="filtros">
+      <input id="buscar" placeholder="Buscar">
+      <input id="buscarCodigo" placeholder="Código de barras">
+      <select id="categoria">
+        <option value="">Todas</option>
+      </select>
+    </div>
+
+    <ul id="productos"></ul>
+  </div>
+</div>
+
+<script type="module" src="venta.js"></script>
+</body>
+</html>

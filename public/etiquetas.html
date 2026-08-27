@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Etiquetas de precios</title>
+<style>
+  /* ===== Pantalla (todo esto se oculta al imprimir) ===== */
+  body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #222;
+  }
+
+  .header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 0 auto 20px;
+  }
+  .header a{ text-decoration: none; font-weight: bold; color: #555; }
+  .header h1{ margin: 0; font-size: 22px; }
+
+  .panel{
+    max-width: 900px;
+    margin: 0 auto 16px;
+  }
+
+  .filtros{ display: flex; gap: 10px; margin-bottom: 12px; }
+  .filtros input, .filtros select{
+    padding: 9px 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .filtros input{ flex: 1; }
+
+  #listaProductos{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+  #listaProductos li{
+    list-style: none;
+    border-bottom: 1px solid #eee;
+  }
+  #listaProductos li:last-child{ border-bottom: none; }
+  #listaProductos li:hover{ background: #f7f7f7; }
+  #listaProductos li label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 9px 14px;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  #listaProductos input[type="checkbox"]{ width: 16px; height: 16px; cursor: pointer; margin: 0; flex-shrink: 0; }
+
+  .barra-accion{
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .contador{ font-size: 14px; color: #444; }
+  .contador b{ color: #111; }
+
+  #btnImprimir{
+    padding: 12px 26px;
+    font-size: 15px;
+    font-weight: bold;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #btnImprimir:hover{ background: #15803d; }
+
+  /* ===== Hojas imprimibles: ocultas en pantalla, visibles solo al imprimir ===== */
+  .hoja{ display: none; }
+
+  .grilla{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 190mm;
+    height: 277mm;
+    margin: 0 auto;
+  }
+
+  .etiqueta{
+    border: 1px solid #000;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 2mm 3mm;
+    overflow: hidden;
+  }
+
+  /* Cuadrante 1: logo (arriba, izquierda) */
+  .etiqueta .logo-cell{
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #000;
+    padding: 1mm;
+  }
+  .etiqueta .logo-cell img{
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Cuadrantes 2 y 3: nombre (arriba, derecha) */
+  .etiqueta .nombre-cell{
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.15;
+    text-align: left;
+    padding-left: 2.5mm;
+    border-bottom: 1px solid #000;
+    padding-bottom: 1mm;
+    overflow: hidden;
+  }
+
+  /* Cuadrante 4 (abajo, izquierda): queda en blanco a propósito */
+
+  /* Cuadrantes 5 y 6: precio (abajo, derecha) */
+  .etiqueta .precio-cell{
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  @media print {
+    .no-imprimir{ display: none !important; }
+    body{ margin: 0; padding: 0; }
+    .hoja{ display: block; break-after: page; }
+    .hoja:last-child{ break-after: auto; }
+  }
+
+  @page{
+    size: A4;
+    margin: 10mm;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="no-imprimir">
+
+  <div class="header">
+    <a href="index.html">⬅ Home</a>
+    <h1>🏷️ Etiquetas de precios</h1>
+  </div>
+
+  <div class="panel">
+    <div class="filtros">
+      <input id="busqueda" placeholder="Buscar producto...">
+      <select id="filtroCategoria">
+        <option value="Todas">Todas las categorías</option>
+      </select>
+    </div>
+
+    <ul id="listaProductos"></ul>
+  </div>
+
+  <div class="barra-accion">
+    <button id="btnImprimir">🖨️ Imprimir etiquetas</button>
+    <p class="contador">
+      <b id="cantidadSeleccionados">0</b> producto(s) seleccionado(s) —
+      <b id="cantidadHojas">0</b> hoja(s) A4
+    </p>
+  </div>
+
+</div>
+
+<div id="hojas"></div>
+
+<script type="module" src="etiquetas.js"></script>
+</body>
+</html>

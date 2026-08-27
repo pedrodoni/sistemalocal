@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gastos operativos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="gastos">
+
+<div class="header">
+  <a href="index.html">⬅ Home</a>
+  <h1>💸 Gastos operativos</h1>
+</div>
+
+<div class="contenedor">
+
+  <!-- 🔹 SELECTOR DE MES -->
+  <div class="card mes-card">
+    <div class="mes-selector">
+      <button id="mesAnterior" class="mes-flecha" aria-label="Mes anterior">‹</button>
+
+      <button id="mesActual" class="mes-actual">
+        <span id="mesNombre">Agosto</span>
+        <span id="anioNombre">2026</span>
+      </button>
+
+      <button id="mesSiguiente" class="mes-flecha" aria-label="Mes siguiente">›</button>
+    </div>
+
+    <div id="mesGrid" class="mes-grid" style="display:none;"></div>
+  </div>
+
+  <!-- 🔹 RESUMEN DEL MES -->
+  <div class="card resumen-card">
+    <div class="resumen-total">
+      <span>Total del mes</span>
+      <strong id="totalMes">$0</strong>
+    </div>
+
+    <div class="resumen-grid">
+      <div class="resumen-item">
+        <span>Cantidad de gastos</span>
+        <strong id="cantidadGastos">0</strong>
+      </div>
+
+      <div class="resumen-item">
+        <span>Promedio diario</span>
+        <strong id="promedioDiario">$0</strong>
+      </div>
+
+      <div class="resumen-item">
+        <span>Vs. mes anterior</span>
+        <strong id="comparativaMes">—</strong>
+      </div>
+    </div>
+
+    <div id="desgloseCategorias" class="desglose-categorias"></div>
+  </div>
+
+  <!-- 🔹 AGREGAR GASTO -->
+  <div class="card">
+    <h2>Agregar gasto</h2>
+
+    <div class="form-grid-gastos">
+      <input id="concepto" placeholder="Concepto (ej: Alquiler)">
+
+      <select id="categoria">
+        <option value="Alquiler">Alquiler</option>
+        <option value="Servicios">Servicios (luz, agua, gas, internet)</option>
+        <option value="Sueldos">Sueldos</option>
+        <option value="Impuestos">Impuestos</option>
+        <option value="Insumos">Insumos / Mantenimiento</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <input id="categoriaOtro" placeholder="Especificar categoría" style="display:none;">
+
+      <input id="monto" type="number" min="0" placeholder="Monto $">
+
+      <select id="dia"></select>
+    </div>
+
+    <button id="guardar" class="btn">Agregar gasto</button>
+  </div>
+
+  <!-- 🔹 LISTA DE GASTOS DEL MES -->
+  <div class="card">
+    <h2>Gastos del mes</h2>
+    <ul id="lista" class="lista-gastos"></ul>
+  </div>
+
+</div>
+
+<script type="module" src="gastos.js"></script>
+</body>
+</html>
