@@ -13,76 +13,102 @@
   <a href="index.html">⬅ Home</a>
   <h1>🛒 Nueva venta</h1>
 </div>
-<div style="display: flex; justify-content: center; align-items: center;">
-    <h3>Calculadora de vuelto</h3>
-
-    <label>.....Monto: $</label>
-    <input type="number" id="calcMonto">
-
-    <label>.....Pago con: $</label>
-    <input type="number" id="calcPago">
-
-    <h3>.....Vuelto: $<span id="calcVuelto">0</span></h3>
-  </div>
-
-<h2 class="ola">Carrito</h2>
-
-<div class="ola">
-  <input id="cliente" placeholder="Nombre del comprador (opcional)">
-</div>
-
-<div class="car">
-  <ul id="carrito"></ul>
-</div>
-  <div style="display: flex; justify-content: center; align-items: center;">
-    <label>Descuento: $</label>
-    <input type="number" id="descuento" value="0" min="0">
-  </div>
-<div class="ola pago">
-
-  <label style="font-size:22px;">Medio de pago:</label>
-
-  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
-    <input type="radio" name="medioPago" value="efectivo" checked>
-    Efectivo
-  </label>
-
-  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
-    <input type="radio" name="medioPago" value="posnet">
-    POSNET
-  </label>
-
-  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
-    <input type="radio" name="medioPago" value="trsf_dany">
-    Transferencia Dany
-  </label>
-
-  <label style="font-size:22px;border: 2px solid #3498db;padding: 20px;width: 150px; border-radius: 8px; ">
-    <input type="radio" name="medioPago" value="trsf_ana">
-    Transferencia Ana
-  </label>
-
-</div>
-
-<h3 style="display: flex; justify-content: center; align-items: center; gap: 5px; margin-bottom: 15px;">Total final: $<span id="totalFinal">0</span></h3> <br>
-
-<div class="botonazo">
-  <button id="confirmar" class="btn">Confirmar venta</button>
-</div>
 
 <div class="contenedor">
 
-  <div class="crd">
-    <h2>➕ Producto suelto</h2>
+  <div class="card calculadora-vuelto">
+    <h3>🧮 Calculadora de vuelto</h3>
 
-    <input id="sueltoNombre" placeholder="Nombre">
-    <input id="sueltoPrecio" type="number" placeholder="Precio">
-    <input id="sueltoCantidad" type="number" min="1" value="1">
+    <div class="calculadora-fila">
+      <div class="calc-campo">
+        <label>Monto</label>
+        <input type="number" id="calcMonto" placeholder="$0">
+      </div>
 
-    <button id="agregarSuelto">Agregar al carrito</button>
+      <div class="calc-campo">
+        <label>Pago con</label>
+        <input type="number" id="calcPago" placeholder="$0">
+      </div>
+
+      <div class="calc-resultado">
+        <span>Vuelto</span>
+        <strong>$<span id="calcVuelto">0</span></strong>
+      </div>
+    </div>
   </div>
 
-  <div class="crd">
+  <div class="card">
+    <h2 class="titulo-seccion">🛍️ Carrito</h2>
+
+    <input id="cliente" class="input-full" placeholder="Nombre del comprador (opcional)">
+
+    <ul id="carrito" class="lista-carrito"></ul>
+
+    <div class="fila-descuento">
+      <label>Descuento: $</label>
+      <input type="number" id="descuento" value="0" min="0">
+    </div>
+
+    <div class="pago" id="pagoSimple">
+      <label class="pago-titulo">Medio de pago</label>
+
+      <div class="pago-opciones">
+        <label class="opcion-pago">
+          <input type="radio" name="medioPago" value="efectivo" checked>
+          💵 Efectivo
+        </label>
+
+        <label class="opcion-pago">
+          <input type="radio" name="medioPago" value="posnet">
+          💳 POSNET
+        </label>
+
+        <label class="opcion-pago">
+          <input type="radio" name="medioPago" value="trsf_dany">
+          📲 Transferencia Dany
+        </label>
+
+        <label class="opcion-pago">
+          <input type="radio" name="medioPago" value="trsf_ana">
+          📲 Transferencia Ana
+        </label>
+      </div>
+    </div>
+
+    <label class="switch-dividido">
+      <input type="checkbox" id="pagoDividido">
+      🔀 Dividir el pago entre varios medios
+    </label>
+
+    <div id="pagoDivididoBox" class="pago-dividido-box" style="display:none;">
+      <div id="listaPagosDivididos"></div>
+
+      <button type="button" id="agregarMedioPago" class="btn-secundario">➕ Agregar medio de pago</button>
+
+      <div id="resumenPagoDividido" class="resumen-pago-dividido">
+        Asignado: $0 de $0
+      </div>
+    </div>
+
+    <div class="total-final">
+      Total final: <strong>$<span id="totalFinal">0</span></strong>
+    </div>
+
+    <button id="confirmar" class="btn btn-confirmar">Confirmar venta</button>
+  </div>
+
+  <div class="card">
+    <h2>➕ Producto suelto</h2>
+
+    <div class="fila-suelto">
+      <input id="sueltoNombre" placeholder="Nombre">
+      <input id="sueltoPrecio" type="number" placeholder="Precio">
+      <input id="sueltoCantidad" type="number" min="1" value="1">
+      <button id="agregarSuelto" class="btn-secundario">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>Productos disponibles</h2>
 
     <div class="filtros">
@@ -95,6 +121,7 @@
 
     <ul id="productos"></ul>
   </div>
+
 </div>
 
 <script type="module" src="venta.js"></script>

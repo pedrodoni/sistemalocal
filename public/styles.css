@@ -54,6 +54,60 @@ body {
     border-color: #bbb;
     transform: translateY(-4px);
 }
+
+/* =========================
+   PAGINA LOGIN
+========================= */
+.login-card {
+    background: #f2f4f7;
+    border: 2px solid #ddd;
+    border-radius: 18px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+}
+
+.login-card h1 {
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+
+.login-card input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.login-card .btn {
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-card .btn:hover {
+    background: #4338ca;
+}
+
+.login-card #error {
+    margin: 0;
+    font-size: 13px;
+    min-height: 16px;
+}
+
 /* =========================
    PAGINA PRODUCTOS
 ========================= */
@@ -88,10 +142,21 @@ body.productos {
 
 /* Cards */
 .productos .card {
+    height: auto;
+    display: block;
     background: #f2f4f7;
     border-radius: 18px;
     border: 2px solid #ddd;
     padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.productos .card h2,
+.productos .card h3 {
+    font-weight: bold;
 }
 
 /* Formulario */
@@ -175,10 +240,22 @@ body.venta {
 
 /* Cards */
 .venta .card {
+    height: auto;
+    display: block;
     background: #f2f4f7;
     border-radius: 18px;
     border: 2px solid #ddd;
     padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.venta .card h2,
+.venta .card h3 {
+    margin-top: 0;
+    font-weight: bold;
 }
 
 /* Filtros */
@@ -196,25 +273,179 @@ body.venta {
     font-size: 14px;
 }
 
-/* Lista productos */
+.venta .input-full {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+/* Lista productos / carrito */
+.venta ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .venta #productos li,
-.venta #carrito li {
+.venta .lista-carrito li {
     background: white;
     border-radius: 12px;
     padding: 12px 15px;
-    margin-bottom: 10px;
     border: 1px solid #ddd;
 }
 
-/* Total */
-.venta h3 {
-    margin-top: 15px;
-    font-size: 20px;
+.venta .lista-carrito li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
 }
 
-/* Botón confirmar */
+/* Productos disponibles: dos columnas para aprovechar el ancho
+   y no tener que scrollear tanto con catálogos grandes */
+.venta #productos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    align-items: start;
+}
+
+@media (max-width: 640px) {
+    .venta #productos {
+        grid-template-columns: 1fr;
+    }
+}
+
+.venta .lista-carrito button {
+    background: #ef4444;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.venta .lista-carrito button:hover {
+    background: #dc2626;
+}
+
+/* Calculadora de vuelto */
+.calculadora-vuelto h3 {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.calculadora-fila {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.calc-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.calc-campo label {
+    font-size: 13px;
+    color: #666;
+    font-weight: bold;
+}
+
+.calc-campo input {
+    width: 140px;
+}
+
+.calc-resultado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    border: 2px solid #16a34a;
+    border-radius: 12px;
+    padding: 8px 24px;
+}
+
+.calc-resultado span {
+    font-size: 13px;
+    color: #666;
+}
+
+.calc-resultado strong {
+    font-size: 24px;
+    color: #16a34a;
+}
+
+/* Título centrado dentro de una card */
+.titulo-seccion {
+    text-align: center;
+}
+
+/* Descuento */
+.fila-descuento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+/* Medio de pago */
+.pago {
+    margin-bottom: 15px;
+}
+
+.pago-titulo {
+    display: block;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.pago-opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.opcion-pago {
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+    font-size: 15px;
+    border: 2px solid #ddd;
+    background: white;
+    padding: 14px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.opcion-pago.seleccionada {
+    border-color: #4f46e5;
+    background: #eef2ff;
+    font-weight: bold;
+}
+
+.opcion-pago input {
+    margin-right: 6px;
+}
+
+/* Total + confirmar */
+.total-final {
+    text-align: center;
+    font-size: 20px;
+    margin: 15px 0;
+}
+
+/* Botón principal */
 .venta .btn {
-    margin-top: 15px;
     padding: 14px;
     font-size: 16px;
     border-radius: 14px;
@@ -229,6 +460,24 @@ body.venta {
 .venta .btn:hover {
     background: #15803d;
 }
+
+.btn-confirmar {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Producto suelto */
+.fila-suelto {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.fila-suelto input {
+    flex: 1;
+    min-width: 120px;
+}
+
 /* =========================
    LISTA PRODUCTOS SUELTA
 ========================= */
@@ -252,26 +501,6 @@ body.venta {
     align-items: center;
     justify-content: space-between;
 }
-body.venta {
-    
-    padding: 30px 0;
-}
-.car{
-    display: flex;
-    justify-content: center;
-}
-.ola{
-    display: flex;
-    justify-content: center;
-    font-size: 50px;
-}
-.botonazo{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-}
 /* =========================
    PAGINA HISTORIAL
 ========================= */
@@ -280,6 +509,18 @@ body.historial {
     display: block;
     height: auto;
     padding: 30px 0;
+}
+
+.historial .header {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 30px;
+}
+
+.historial .header a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
 }
 
 /* Contenedor general */
@@ -292,18 +533,124 @@ body.historial {
     gap: 25px;
 }
 
-/* Filtro mes */
-.historial input[type="month"] {
+.historial .card {
+    height: auto;
+    display: block;
+    background: #f2f4f7;
+    border-radius: 18px;
+    border: 2px solid #ddd;
+    padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.historial .card h2,
+.historial .card h3 {
+    font-weight: bold;
+}
+
+/* Filtros: día / mes / año */
+.card.filtros-historial {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.filtro-item label {
+    font-weight: bold;
+    color: #444;
+    font-size: 14px;
+}
+
+.historial input[type="month"],
+.historial input[type="date"],
+.historial select {
     padding: 10px;
     border-radius: 10px;
     border: 1px solid #bbb;
     font-size: 14px;
 }
 
-/* Recaudación */
+/* Resumen de caja (comparte look con .resumen-* de gastos) */
+.resumen-grid.resumen-grid-historial {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.resumen-grid.resumen-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Secciones plegables (details/summary): Ganancia estimada,
+   Ventas por categoría, o cualquier otra card colapsable */
+.card-plegable summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 17px;
+    list-style: none;
+}
+
+.card-plegable summary::-webkit-details-marker {
+    display: none;
+}
+
+.card-plegable summary::before {
+    content: "▶";
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 12px;
+    color: #4f46e5;
+    transition: 0.2s;
+}
+
+.card-plegable[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.card-plegable[open] summary {
+    margin-bottom: 14px;
+    display: block;
+}
+
+.card-plegable .resumen-grid {
+    margin-top: 18px;
+}
+
+.card-plegable ul {
+    margin-top: 4px;
+}
+
+.nota-ganancia {
+    color: #888;
+    font-size: 13px;
+    margin: 16px 0 0;
+    line-height: 1.5;
+}
+
+#gananciaPorProducto {
+    margin-top: 12px;
+}
+
+/* Títulos de sección */
+.titulo-graficos {
+    text-align: center;
+    margin: 0;
+}
+
+/* Recaudación / categorías / franja horaria */
 .historial ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .historial li {
@@ -312,6 +659,70 @@ body.historial {
     padding: 12px 15px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
+}
+
+.historial li:last-child {
+    margin-bottom: 0;
+}
+
+/* Lista de ventas */
+.venta-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.venta-item.anulada {
+    opacity: 0.6;
+}
+
+.venta-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.venta-badge {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1.5px solid;
+    background: white;
+    cursor: default;
+}
+
+.venta-anulada-tag {
+    font-size: 11px;
+    font-weight: bold;
+    color: #c0392b;
+    background: #fdecea;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.venta-acciones {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.venta-acciones button {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.venta-acciones button:hover {
+    background: #f2f4f7;
+    border-color: #bbb;
 }
 
 /* =========================
@@ -382,10 +793,21 @@ body.catalogo {
 
 /* Card */
 .catalogo .card {
+    height: auto;
+    display: block;
     background: #f2f4f7;
     border-radius: 18px;
     border: 2px solid #ddd;
     padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.catalogo .card h2,
+.catalogo .card h3 {
+    font-weight: bold;
 }
 
 /* Tabla */
@@ -465,10 +887,21 @@ body.margenes {
 
 /* Card */
 .margenes .card {
+    height: auto;
+    display: block;
     background: #f2f4f7;
     border-radius: 18px;
     border: 2px solid #ddd;
     padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.margenes .card h2,
+.margenes .card h3 {
+    font-weight: bold;
 }
 
 /* Lista */
@@ -522,26 +955,111 @@ body.margenes {
     color: #16a34a;
     text-align: right;
 }
-.venta #carrito li {
+/* =========================
+   PAGO DIVIDIDO (venta)
+========================= */
+.switch-dividido {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #444;
 }
 
-.venta #carrito button {
+.switch-dividido input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.pago-dividido-box {
+    width: 100%;
+    max-width: 700px;
+    margin: 15px auto 0;
+    background: #f2f4f7;
+    border: 2px solid #ddd;
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.fila-pago-dividido {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.fila-pago-dividido select {
+    flex: 1.3;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 15px;
+}
+
+.fila-pago-dividido input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 15px;
+}
+
+.fila-pago-dividido button {
     background: #ef4444;
     border: none;
     color: white;
-    padding: 6px 10px;
+    width: 34px;
+    height: 34px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
+    flex-shrink: 0;
 }
 
-.venta #carrito button:hover {
+.fila-pago-dividido button:hover {
     background: #dc2626;
 }
+
+.btn-secundario {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 2px dashed #4f46e5;
+    background: white;
+    color: #4f46e5;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-secundario:hover {
+    background: #eef2ff;
+}
+
+.resumen-pago-dividido {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    color: #444;
+}
+
+.resumen-pago-dividido.ok {
+    color: #1f8f3a;
+    border-color: #1f8f3a;
+    background: #eafaf0;
+}
+
+.resumen-pago-dividido.error {
+    color: #c0392b;
+    border-color: #c0392b;
+    background: #fdecea;
+}
+
 /* =========================
    PAGINA GASTOS
 ========================= */
@@ -579,6 +1097,15 @@ body.gastos {
     border-radius: 18px;
     border: 2px solid #ddd;
     padding: 25px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #222;
+    text-align: left;
+}
+
+.gastos .card h2,
+.gastos .card h3 {
+    font-weight: bold;
 }
 
 /* Selector de mes */
@@ -690,8 +1217,9 @@ body.gastos {
     font-weight: bold;
 }
 
-/* Resumen */
-.resumen-card {
+/* Resumen (mayor especificidad que ".gastos .card" / ".historial .card"
+   para que el fondo blanco gane siempre, sin depender del orden) */
+.card.resumen-card {
     background: white;
 }
 

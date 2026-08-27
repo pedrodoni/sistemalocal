@@ -42,6 +42,13 @@ const sueltoPrecio = document.getElementById("sueltoPrecio");
 const sueltoCantidad = document.getElementById("sueltoCantidad");
 const btnAgregarSuelto = document.getElementById("agregarSuelto");
 
+const pagoDivididoCheckbox = document.getElementById("pagoDividido");
+const pagoSimpleDiv = document.getElementById("pagoSimple");
+const pagoDivididoBox = document.getElementById("pagoDivididoBox");
+const listaPagosDivididos = document.getElementById("listaPagosDivididos");
+const btnAgregarMedioPago = document.getElementById("agregarMedioPago");
+const resumenPagoDividido = document.getElementById("resumenPagoDividido");
+
 let productos = [];
 let carrito = [];
 function obtenerMedioPago() {
@@ -49,6 +56,133 @@ function obtenerMedioPago() {
     document.querySelector('input[name="medioPago"]:checked');
 
   return seleccionado ? seleccionado.value : "efectivo";
+}
+
+/* =============================
+   RESALTAR MEDIO DE PAGO SELECCIONADO
+   (clase en JS en vez de :has() para que funcione parejo
+   en cualquier navegador/tablet que use el local)
+============================= */
+document.querySelectorAll('input[name="medioPago"]').forEach(input => {
+  input.addEventListener("change", () => {
+    document.querySelectorAll(".opcion-pago").forEach(label => {
+      label.classList.toggle("seleccionada", label.contains(input) && input.checked);
+    });
+  });
+
+  if (input.checked) {
+    input.closest(".opcion-pago")?.classList.add("seleccionada");
+  }
+});
+
+/* =============================
+   PAGO DIVIDIDO (varios medios en una venta)
+============================= */
+const MEDIOS_PAGO = [
+  { value: "efectivo",  label: "💵 Efectivo" },
+  { value: "posnet",    label: "💳 POSNET" },
+  { value: "trsf_dany", label: "📲 Transferencia Dany" },
+  { value: "trsf_ana",  label: "📲 Transferencia Ana" }
+];
+
+function etiquetaMedioPago(medio) {
+  return MEDIOS_PAGO.find(m => m.value === medio)?.label || medio;
+}
+
+function calcularTotalActual() {
+  const subtotal = carrito.reduce((acc, i) => acc + i.precio_venta * i.cantidad, 0);
+  const descuento = Number(descuentoInput?.value) || 0;
+  return Math.max(subtotal - descuento, 0);
+}
+
+function crearFilaPago(medio = "efectivo", monto = "") {
+  const fila = document.createElement("div");
+  fila.className = "fila-pago-dividido";
+
+  const select = document.createElement("select");
+  MEDIOS_PAGO.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.value;
+    opt.textContent = m.label;
+    if (m.value === medio) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = "0";
+  input.placeholder = "Monto $";
+  if (monto !== "") input.value = monto;
+
+  const btnQuitar = document.createElement("button");
+  btnQuitar.type = "button";
+  btnQuitar.textContent = "❌";
+  btnQuitar.onclick = () => {
+    fila.remove();
+    renderResumenPagoDividido();
+  };
+
+  input.oninput = renderResumenPagoDividido;
+  select.onchange = renderResumenPagoDividido;
+
+  fila.appendChild(select);
+  fila.appendChild(input);
+  fila.appendChild(btnQuitar);
+
+  listaPagosDivididos.appendChild(fila);
+  return fila;
+}
+
+function obtenerPagosDivididos() {
+  return Array.from(listaPagosDivididos.querySelectorAll(".fila-pago-dividido"))
+    .map(fila => ({
+      medio: fila.querySelector("select").value,
+      monto: Number(fila.querySelector("input").value) || 0
+    }))
+    .filter(p => p.monto > 0);
+}
+
+function renderResumenPagoDividido() {
+  if (!pagoDivididoCheckbox?.checked) return;
+
+  const total = calcularTotalActual();
+  const asignado = obtenerPagosDivididos().reduce((acc, p) => acc + p.monto, 0);
+  const diferencia = total - asignado;
+
+  resumenPagoDividido.classList.remove("ok", "error");
+
+  let texto = `Asignado: $${asignado.toLocaleString("es-AR")} de $${total.toLocaleString("es-AR")}`;
+
+  if (asignado === total && total > 0) {
+    resumenPagoDividido.classList.add("ok");
+    texto += " ✔";
+  } else if (asignado > 0 || total > 0) {
+    resumenPagoDividido.classList.add("error");
+    texto += diferencia > 0
+      ? ` — falta $${diferencia.toLocaleString("es-AR")}`
+      : ` — sobran $${Math.abs(diferencia).toLocaleString("es-AR")}`;
+  }
+
+  resumenPagoDividido.textContent = texto;
+}
+
+if (pagoDivididoCheckbox) {
+  pagoDivididoCheckbox.onchange = () => {
+    const activo = pagoDivididoCheckbox.checked;
+    pagoSimpleDiv.style.display = activo ? "none" : "flex";
+    pagoDivididoBox.style.display = activo ? "block" : "none";
+
+    if (activo && listaPagosDivididos.children.length === 0) {
+      crearFilaPago("efectivo", calcularTotalActual());
+    }
+
+    renderResumenPagoDividido();
+  };
+
+  btnAgregarMedioPago.onclick = () => {
+    crearFilaPago();
+    renderResumenPagoDividido();
+  };
 }
 
 /* =============================
@@ -231,6 +365,8 @@ function renderCarrito() {
   if (totalFinalSpan) {
     totalFinalSpan.textContent = totalFinal;
   }
+
+  renderResumenPagoDividido();
 }
 
 
@@ -242,9 +378,13 @@ window.eliminarDelCarrito = index => {
    IMPRIMIR TICKET
 ============================= */
 
-function generarHTMLTicket(carrito, subtotal, descuento, total, medioPago, cliente) {
+function generarHTMLTicket(carrito, subtotal, descuento, total, pagos, cliente) {
 
   const fecha = new Date().toLocaleString("es-AR");
+
+  const pagosHTML = pagos
+    .map(p => `${etiquetaMedioPago(p.medio)}: $${p.monto}`)
+    .join("<br>");
 
   let productosHTML = "";
 
@@ -300,7 +440,7 @@ function generarHTMLTicket(carrito, subtotal, descuento, total, medioPago, clien
 
     Fecha: ${fecha}<br>
     Cliente: ${cliente}<br>
-    Medio de pago: ${medioPago}
+    ${pagosHTML}
 
     <table>
 
@@ -331,14 +471,14 @@ function generarHTMLTicket(carrito, subtotal, descuento, total, medioPago, clien
 }
 
 
-function imprimirTicket(carrito, subtotal, descuento, total, medioPago, cliente){
+function imprimirTicket(carrito, subtotal, descuento, total, pagos, cliente){
 
   const html = generarHTMLTicket(
     carrito,
     subtotal,
     descuento,
     total,
-    medioPago,
+    pagos,
     cliente
   );
 
@@ -363,32 +503,51 @@ btnConfirmar.onclick = async () => {
     Swal.fire("Carrito vacío", "", "info");
     return;
   }
-    const medioPago = obtenerMedioPago();
 
-function obtenerMedioPago() {
-  const seleccionado =
-    document.querySelector('input[name="medioPago"]:checked');
-
-  return seleccionado ? seleccionado.value : "efectivo";
-}
   let subtotal = 0;
   let html = "<ul>";
 
   carrito.forEach(i => {
-  subtotal += i.precio_venta * i.cantidad;
-
+    subtotal += i.precio_venta * i.cantidad;
     html += `<li>${i.nombre} x${i.cantidad}</li>`;
   });
 
   const descuento = Number(descuentoInput?.value) || 0;
-const total = Math.max(subtotal - descuento, 0);
+  const total = Math.max(subtotal - descuento, 0);
 
-html += `
+  const dividido = pagoDivididoCheckbox?.checked;
+  let pagos;
+
+  if (dividido) {
+    pagos = obtenerPagosDivididos();
+    const asignado = pagos.reduce((acc, p) => acc + p.monto, 0);
+
+    if (pagos.length === 0 || Math.round(asignado) !== Math.round(total)) {
+      Swal.fire(
+        "Los montos no coinciden",
+        `Asignaste $${asignado.toLocaleString("es-AR")} y el total es $${total.toLocaleString("es-AR")}. Ajustá los montos antes de confirmar.`,
+        "warning"
+      );
+      return;
+    }
+  } else {
+    pagos = [{ medio: obtenerMedioPago(), monto: total }];
+  }
+
+  const medioPago = pagos.length === 1 ? pagos[0].medio : "dividido";
+
+  const detallePagos = pagos
+    .map(p => `${etiquetaMedioPago(p.medio)}: $${p.monto.toLocaleString("es-AR")}`)
+    .join("<br>");
+
+  html += `
 </ul>
 <hr>
 Subtotal: $${subtotal}<br>
 Descuento: $${descuento}<br>
 <b>Total: $${total}</b>
+<hr>
+${detallePagos}
 `;
 
 
@@ -413,7 +572,7 @@ Descuento: $${descuento}<br>
     subtotal,
     descuento,
     total,
-    medioPago,
+    pagos,
     cliente
   );
 
@@ -434,12 +593,12 @@ await addDoc(collection(db, "ventas"), {
   subtotal,
   descuento,
   total,
-  items:carrito,
-
-  cliente,
   items: carrito,
 
-  medioPago, // 🔥 NUEVO CAMPO
+  cliente,
+
+  medioPago, // valor único si es un solo medio, "dividido" si son varios
+  pagos,     // 🔀 desglose real: [{ medio, monto }, ...]
 
   anulada: false
 });
@@ -447,6 +606,14 @@ await addDoc(collection(db, "ventas"), {
   carrito = [];
   renderCarrito();
   document.getElementById("cliente").value = "";
+
+  if (pagoDivididoCheckbox) {
+    pagoDivididoCheckbox.checked = false;
+    pagoSimpleDiv.style.display = "flex";
+    pagoDivididoBox.style.display = "none";
+    listaPagosDivididos.innerHTML = "";
+  }
+
   cargarProductos();
 
   Swal.fire("Venta confirmada", "", "success");

@@ -30,9 +30,13 @@ const listaVentas      = document.getElementById("ventas");
 const listaRecaudacion = document.getElementById("recaudacion");
 const filtroMes        = document.getElementById("filtroMes");
 const filtroDia        = document.getElementById("filtroDia");
+const filtroAnio       = document.getElementById("filtroAnio");
 
 const totalHoySpan      = document.getElementById("totalHoy");
 const efectivoHoySpan   = document.getElementById("efectivoHoy");
+const posnetHoySpan     = document.getElementById("posnetHoy");
+const trsfDanyHoySpan   = document.getElementById("trsfDanyHoy");
+const trsfAnaHoySpan    = document.getElementById("trsfAnaHoy");
 const noEfectivoHoySpan = document.getElementById("noEfectivoHoy");
 
 const costoEstimadoSpan    = document.getElementById("costoEstimado");
@@ -40,8 +44,22 @@ const gananciaEstimadaSpan = document.getElementById("gananciaEstimada");
 const margenEstimadoSpan   = document.getElementById("margenEstimado");
 const gananciaPorProducto  = document.getElementById("gananciaPorProducto");
 
-let ventasGlobal  = [];
+let ventasGlobal   = [];
 let graficoSemanal = null;
+let graficoMensual = null;
+
+/* =============================
+   SELECT DE AÑO
+============================= */
+(function poblarAnios() {
+  const anioActual = new Date().getFullYear();
+  for (let y = anioActual; y >= anioActual - 5; y--) {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    filtroAnio.appendChild(opt);
+  }
+})();
 
 /* =============================
    CACHE DE PRODUCTOS (para el precio de compra)
@@ -64,20 +82,26 @@ async function getProductosCache() {
    ESTADO VACÍO
 ============================= */
 function mostrarEstadoVacio() {
-  listaVentas.innerHTML      = `<li style="color:#888; padding:12px;">Seleccioná un día o mes para ver las ventas.</li>`;
+  listaVentas.innerHTML      = `<li style="color:#888; padding:12px;">Seleccioná un día, mes o año para ver las ventas.</li>`;
   listaRecaudacion.innerHTML = "";
-  totalHoySpan.textContent      = 0;
-  efectivoHoySpan.textContent   = 0;
-  noEfectivoHoySpan.textContent = 0;
+  totalHoySpan.textContent      = "$0";
+  efectivoHoySpan.textContent   = "$0";
+  posnetHoySpan.textContent     = "$0";
+  trsfDanyHoySpan.textContent   = "$0";
+  trsfAnaHoySpan.textContent    = "$0";
+  noEfectivoHoySpan.textContent = "$0";
   document.getElementById("cantidadVentas").textContent = 0;
-  document.getElementById("promedioVentas").textContent = 0;
+  document.getElementById("promedioVentas").textContent = "$0";
   document.getElementById("ventasPorCategoria").innerHTML = "";
   document.getElementById("ventasPorHora").innerHTML = "";
 
-  costoEstimadoSpan.textContent    = 0;
-  gananciaEstimadaSpan.textContent = 0;
-  margenEstimadoSpan.textContent   = 0;
-  gananciaPorProducto.innerHTML    = `<li style="color:#888; padding:12px;">Seleccioná un día o mes para estimar la ganancia.</li>`;
+  costoEstimadoSpan.textContent    = "$0";
+  gananciaEstimadaSpan.textContent = "$0";
+  margenEstimadoSpan.textContent   = "0%";
+  gananciaPorProducto.innerHTML    = `<li style="color:#888; padding:12px;">Seleccioná un día, mes o año para estimar la ganancia.</li>`;
+
+  if (graficoSemanal) { graficoSemanal.destroy(); graficoSemanal = null; }
+  if (graficoMensual) { graficoMensual.destroy(); graficoMensual = null; }
 }
 
 function renderVentasPorCategoria(ventas) {
@@ -175,9 +199,9 @@ async function calcularGanancia(ventas) {
 }
 
 function renderGanancia(resultado) {
-  costoEstimadoSpan.textContent    = resultado.costoTotal.toLocaleString("es-AR");
-  gananciaEstimadaSpan.textContent = resultado.gananciaEstimada.toLocaleString("es-AR");
-  margenEstimadoSpan.textContent   = resultado.margenProm.toFixed(1);
+  costoEstimadoSpan.textContent    = "$" + resultado.costoTotal.toLocaleString("es-AR");
+  gananciaEstimadaSpan.textContent = "$" + resultado.gananciaEstimada.toLocaleString("es-AR");
+  margenEstimadoSpan.textContent   = resultado.margenProm.toFixed(1) + "%";
 
   gananciaPorProducto.innerHTML = "";
 
@@ -212,7 +236,7 @@ function renderGanancia(resultado) {
    CONSTRUIR RANGO DE FECHAS
 ============================= */
 function getRango() {
-  // Prioridad: día > mes
+  // Prioridad: día > mes > año
   if (filtroDia.value) {
     const [y, m, d] = filtroDia.value.split("-").map(Number);
     return {
@@ -226,6 +250,14 @@ function getRango() {
     return {
       inicio: new Date(y, m - 1, 1, 0, 0, 0),
       fin:    new Date(y, m,     0, 23, 59, 59) // día 0 del mes siguiente = último día del mes
+    };
+  }
+
+  if (filtroAnio.value) {
+    const y = Number(filtroAnio.value);
+    return {
+      inicio: new Date(y, 0, 1, 0, 0, 0),
+      fin:    new Date(y, 11, 31, 23, 59, 59)
     };
   }
 
@@ -258,6 +290,7 @@ async function cargarVentas() {
 
   renderVentas(ventasGlobal);
   renderGraficos(ventasGlobal);
+  renderGraficoMensual(ventasGlobal);
   calcularCaja(ventasGlobal);
   renderRecaudacion(ventasGlobal);
   renderVentasPorCategoria(ventasGlobal);
@@ -266,6 +299,24 @@ async function cargarVentas() {
   const resultadoGanancia = await calcularGanancia(ventasGlobal);
   renderGanancia(resultadoGanancia);
 }
+
+/* =============================
+   PAGOS POR VENTA
+   Ventas nuevas traen v.pagos (desglose real, soporta pago
+   dividido entre varios medios). Ventas viejas solo tienen
+   v.medioPago + v.total: las tratamos como un pago único.
+============================= */
+function pagosDeVenta(v) {
+  if (Array.isArray(v.pagos) && v.pagos.length > 0) return v.pagos;
+  return [{ medio: v.medioPago, monto: v.total }];
+}
+
+const MEDIO_PAGO_INFO = {
+  efectivo:  { label: "💵 Efectivo",            color: "#1f8f3a" },
+  posnet:    { label: "💳 POSNET",              color: "#1565c0" },
+  trsf_dany: { label: "📲 Transferencia Dany",  color: "#8e24aa" },
+  trsf_ana:  { label: "📲 Transferencia Ana",   color: "#ef6c00" }
+};
 
 /* =============================
    CAJA DEL DÍA/PERÍODO
@@ -281,27 +332,29 @@ function calcularCaja(ventas) {
 
   validas.forEach(v => {
     total += v.total;
-    switch (v.medioPago) {
-      case "efectivo":   efectivo += v.total;  break;
-      case "posnet":     posnet   += v.total;  break;
-      case "trsf_dany":  trsfDany += v.total;  break;
-      case "trsf_ana":   trsfAna  += v.total;  break;
-    }
+
+    pagosDeVenta(v).forEach(p => {
+      switch (p.medio) {
+        case "efectivo":   efectivo += p.monto;  break;
+        case "posnet":     posnet   += p.monto;  break;
+        case "trsf_dany":  trsfDany += p.monto;  break;
+        case "trsf_ana":   trsfAna  += p.monto;  break;
+      }
+    });
   });
 
   const cantidad = validas.length;
   const promedio = cantidad > 0 ? Math.round(total / cantidad) : 0;
 
-  totalHoySpan.textContent    = total;
-  efectivoHoySpan.textContent =
-    efectivo +
-    " | POSNET: $" + posnet +
-    " | Dany: $"   + trsfDany +
-    " | Ana: $"    + trsfAna;
-  noEfectivoHoySpan.textContent = posnet + trsfDany + trsfAna;
+  totalHoySpan.textContent      = "$" + total.toLocaleString("es-AR");
+  efectivoHoySpan.textContent   = "$" + efectivo.toLocaleString("es-AR");
+  posnetHoySpan.textContent     = "$" + posnet.toLocaleString("es-AR");
+  trsfDanyHoySpan.textContent   = "$" + trsfDany.toLocaleString("es-AR");
+  trsfAnaHoySpan.textContent    = "$" + trsfAna.toLocaleString("es-AR");
+  noEfectivoHoySpan.textContent = "$" + (posnet + trsfDany + trsfAna).toLocaleString("es-AR");
 
   document.getElementById("cantidadVentas").textContent = cantidad;
-  document.getElementById("promedioVentas").textContent = promedio;
+  document.getElementById("promedioVentas").textContent = "$" + promedio.toLocaleString("es-AR");
 }
 
 /* =============================
@@ -315,12 +368,13 @@ function renderRecaudacion(ventas) {
 
   if (total === 0) return;
 
-  const label = filtroDia.value
-    ? filtroDia.value.split("-").reverse().join("/")
-    : filtroMes.value;
+  let label = "";
+  if (filtroDia.value) label = filtroDia.value.split("-").reverse().join("/");
+  else if (filtroMes.value) label = filtroMes.value;
+  else if (filtroAnio.value) label = `Año ${filtroAnio.value}`;
 
   const li = document.createElement("li");
-  li.textContent = `📅 ${label} — $${total}`;
+  li.textContent = `📅 ${label} — $${total.toLocaleString("es-AR")}`;
   listaRecaudacion.appendChild(li);
 }
 
@@ -339,26 +393,42 @@ function renderVentas(ventas) {
     const fecha   = v.fecha?.toDate().toLocaleString() || "—";
     const cliente = v.cliente || "Consumidor final";
 
-    let medioTexto = "";
-    let color      = "";
+    const pagos = pagosDeVenta(v);
+    let medioTexto;
+    let color;
+    let tooltip = "";
 
-    switch (v.medioPago) {
-      case "efectivo":  medioTexto = "💵 Efectivo";            color = "#1f8f3a"; break;
-      case "posnet":    medioTexto = "💳 POSNET";              color = "#1565c0"; break;
-      case "trsf_dany": medioTexto = "📲 Transferencia Dany"; color = "#8e24aa"; break;
-      case "trsf_ana":  medioTexto = "📲 Transferencia Ana";  color = "#ef6c00"; break;
-      default:          medioTexto = "—";                      color = "gray";
+    if (pagos.length > 1) {
+      medioTexto = "🔀 Mixto";
+      color = "#6d28d9";
+      tooltip = pagos
+        .map(p => `${(MEDIO_PAGO_INFO[p.medio]?.label || p.medio)}: $${p.monto.toLocaleString("es-AR")}`)
+        .join(" · ");
+    } else {
+      const info = MEDIO_PAGO_INFO[pagos[0]?.medio];
+      medioTexto = info ? info.label : "—";
+      color = info ? info.color : "gray";
     }
 
     const li = document.createElement("li");
+    li.className = "venta-item" + (v.anulada ? " anulada" : "");
+
+    const badge = `<span class="venta-badge" style="color:${color}; border-color:${color};" title="${tooltip}">${medioTexto}</span>`;
 
     li.innerHTML = v.anulada
-      ? `❌ <b>${fecha}</b> — ${cliente} — $${v.total}
-         <span style="color:${color}; font-weight:bold;">${medioTexto}</span> (ANULADA)`
-      : `<b>${fecha}</b> — ${cliente} — $${v.total}
-         <span style="color:${color}; font-weight:bold;">${medioTexto}</span>
-         <button onclick="verDetalleVenta('${v.id}')">📦</button>
-         <button onclick="anularVenta('${v.id}')">Anular</button>`;
+      ? `<div class="venta-info">
+           <span>❌ <b>${fecha}</b> — ${cliente} — $${v.total.toLocaleString("es-AR")}</span>
+           ${badge}
+           <span class="venta-anulada-tag">ANULADA</span>
+         </div>`
+      : `<div class="venta-info">
+           <span><b>${fecha}</b> — ${cliente} — $${v.total.toLocaleString("es-AR")}</span>
+           ${badge}
+         </div>
+         <div class="venta-acciones">
+           <button onclick="verDetalleVenta('${v.id}')" title="Ver detalle">📦</button>
+           <button onclick="anularVenta('${v.id}')" title="Anular venta">Anular</button>
+         </div>`;
 
     listaVentas.appendChild(li);
   });
@@ -410,7 +480,35 @@ function renderGraficos(ventas) {
 
   graficoSemanal = new Chart(
     document.getElementById("graficoSemanal"),
-    { type: "bar", data: { labels: dias, datasets: [{ data }] } }
+    {
+      type: "bar",
+      data: { labels: dias, datasets: [{ data, backgroundColor: "#16a34a", borderRadius: 6 }] },
+      options: { plugins: { legend: { display: false } } }
+    }
+  );
+}
+
+/* =============================
+   GRÁFICO MENSUAL (útil sobre todo al filtrar por año)
+============================= */
+function renderGraficoMensual(ventas) {
+  const validas = ventas.filter(v => !v.anulada);
+  const meses   = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const data    = Array(12).fill(0);
+
+  validas.forEach(v => {
+    data[v.fecha.toDate().getMonth()] += v.total;
+  });
+
+  if (graficoMensual) graficoMensual.destroy();
+
+  graficoMensual = new Chart(
+    document.getElementById("graficoMensual"),
+    {
+      type: "bar",
+      data: { labels: meses, datasets: [{ data, backgroundColor: "#4f46e5", borderRadius: 6 }] },
+      options: { plugins: { legend: { display: false } } }
+    }
   );
 }
 
@@ -457,12 +555,18 @@ window.verDetalleVenta = id => {
     html += "<li>Sin productos</li>";
   }
 
+  const pagosHTML = pagosDeVenta(venta)
+    .map(p => `${(MEDIO_PAGO_INFO[p.medio]?.label || p.medio)}: $${p.monto}`)
+    .join("<br>");
+
   html += `
     </ul>
     <hr>
     Subtotal: $${venta.subtotal || venta.total}<br>
     Descuento: $${venta.descuento || 0}<br>
     <b>Total: $${venta.total}</b>
+    <hr>
+    ${pagosHTML}
   `;
 
   Swal.fire({ title: "Detalle de venta", html, width: 600 });
@@ -472,12 +576,20 @@ window.verDetalleVenta = id => {
    EVENTOS
 ============================= */
 filtroMes.onchange = () => {
-  filtroDia.value = ""; // si elegís mes, limpiás el día
+  filtroDia.value  = ""; // si elegís mes, limpiás día y año
+  filtroAnio.value = "";
   cargarVentas();
 };
 
 filtroDia.onchange = () => {
-  filtroMes.value = ""; // si elegís día, limpiás el mes
+  filtroMes.value  = ""; // si elegís día, limpiás mes y año
+  filtroAnio.value = "";
+  cargarVentas();
+};
+
+filtroAnio.onchange = () => {
+  filtroMes.value = ""; // si elegís año, limpiás día y mes
+  filtroDia.value = "";
   cargarVentas();
 };
 
